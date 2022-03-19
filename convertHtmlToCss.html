@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Html to Css</title>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <script>
+      const classRegex = /(?<=class=")(.*?)(?=">)/gi
+      const idRegex = /(?<=id=")(.*?)(?=">)/gi
+
+      window.onload = async function convertText(e) {
+        const htmlText = await navigator.clipboard.readText()
+        const foundClasses = htmlText.match(classRegex)
+        const foundIds = htmlText.match(idRegex)
+
+        if (!foundClasses && !foundIds) {
+          alert(
+            'Html text is not readable, please make sure you copied html text! Clipboard reseted!'
+          )
+        }
+
+        if (foundClasses) {
+          var classNames = foundClasses.map(
+            (className) => `.${className}{\n\n}`
+          )
+        } else {
+          var classNames = []
+        }
+
+        if (foundIds) {
+          var ids = foundIds.map((id) => `#${id}{\n\n}`)
+        } else {
+          var ids = []
+        }
+
+        const cssText = classNames.join('\n\n') + '\n\n' + ids.join('\n\n')
+        await navigator.clipboard.writeText(cssText)
+        alert('Css text copied!')
+      }
+    </script>
+  </body>
+</html>
